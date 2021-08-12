@@ -50,6 +50,6 @@ public class Config {
 
         instance = new Config();
         instance.setDownloadList((String) map.get("dl_list"));
-        instance.setDownloadList((String) map.get("dl_dir"));
+        instance.setDownloadDir((String) map.get("dl_dir"));
     }
 }

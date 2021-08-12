@@ -1,5 +1,6 @@
 package demo;
 
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -96,10 +97,14 @@ public class Downloader implements Callable<Object> {
         try {
             logger.info("deal with {}", videoUrl);
             doc = getDoc(videoUrl);
+        } catch (HttpStatusException httpStatusException) {
+            logger.error("Http status error: {}", httpStatusException.toString());
+            return httpStatusException.getMessage();
         } catch (Exception e) {
             logger.error("error", e);
             return e.getMessage();
         }
+
         if (doc.location().contains("404.html")) {
             logger.info("Video has been deleted.");
             return "Video has been deleted.";

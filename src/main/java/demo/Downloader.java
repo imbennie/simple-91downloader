@@ -94,6 +94,7 @@ public class Downloader implements Callable<Object> {
     public Object call() throws Exception {
         Document doc;
         try {
+            logger.info("deal with {}", videoUrl);
             doc = getDoc(videoUrl);
         } catch (Exception e) {
             logger.error("error", e);

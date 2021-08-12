@@ -96,6 +96,7 @@ public class Downloader implements Callable<Object> {
         try {
             doc = getDoc(videoUrl);
         } catch (Exception e) {
+            logger.error("error", e);
             return e.getMessage();
         }
         if (doc.location().contains("404.html")) {

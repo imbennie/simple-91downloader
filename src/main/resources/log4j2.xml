@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="3">
+
+
+    <Properties>
+        <Property name="LOG4J_SKIP_JANSI" value="false"/>
+        <Property name="console_pattern"
+                  value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %highlight{%-5level}---[%-30.-40t] %style{%-30.-50logger{1.}#%M:%L}{Cyan}: %msg%n"/>
+
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="${console_pattern}"/>
+        </Console>
+    </Appenders>
+
+
+    <Loggers>
+
+        <Root level="info">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+
+        <logger name="demo" level="info"/>
+
+
+    </Loggers>
+</Configuration>

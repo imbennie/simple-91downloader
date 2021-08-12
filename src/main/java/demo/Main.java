@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY;
 
 /**
  * Created on 06/20 2021.
@@ -23,19 +22,15 @@ import static org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY;
  */
 public class Main {
 
-    static {
-        System.setProperty(DEFAULT_LOG_LEVEL_KEY, "INFO");
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("configs: " + Arrays.toString(args));
+    public static void main(String[] args) {
+        logger.info("configs: {}", Arrays.toString(args));
         Config.loadConfig(args);
         download();
     }
 
-    static void download() throws Exception {
+    static void download() {
         Config config       = Config.getInstance();
         String downloadList = config.getDownloadList();
 

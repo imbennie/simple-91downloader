@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.concurrent.Callable;
 
 import static demo.Constants.UA;
@@ -61,8 +62,10 @@ public class Downloader implements Callable<Object> {
 
 
     private void outputToMp4(String title, String m3u8Url) throws Exception {
-        Files.createDirectories(Paths.get(config.getDownloadDir()));
-        String mp4Path = new StringBuilder(config.getDownloadDir())
+        String downloadDir = config.getDownloadDir() + LocalDate.now() + "/";
+
+        Files.createDirectories(Paths.get(downloadDir));
+        String mp4Path = new StringBuilder(downloadDir)
                 .append(title)
                 .append(".mp4").toString();
         Files.deleteIfExists(Paths.get(mp4Path));

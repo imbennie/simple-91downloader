@@ -29,17 +29,22 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+        Config.loadConfig(args);
         download();
     }
 
-
     static void download() throws Exception {
-        Path            path = Paths.get(ClassLoader.getSystemResource("dl_list.txt").toURI());
+        Config config       = Config.getInstance();
+        String downloadList = config.getDownloadList();
+
+        Path            path = Paths.get(downloadList);
         ExecutorService pool = Executors.newCachedThreadPool();
 
         try (Stream<String> lines = Files.lines(path, Charset.defaultCharset())) {
 
-            List<Downloader> collect = lines.filter(line -> !line.startsWith("#"))
+            List<Downloader> collect = lines
+                    .distinct()
+                    .filter(line -> !line.startsWith("#"))
                     .map(line -> new Downloader(line))
                     .collect(Collectors.toList());
 

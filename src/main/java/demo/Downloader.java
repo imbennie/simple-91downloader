@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
-import static demo.Constants.*;
+import static demo.Constants.UA;
 
 /**
  * Created on 06/27 2021.
@@ -22,13 +22,15 @@ public class Downloader implements Callable<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(Downloader.class);
 
-    private String videoUrl;
+    private       String videoUrl;
+    private final Config config;
 
     public Downloader() {
-
+        config = Config.getInstance();
     }
 
     public Downloader(String videoUrl) {
+        this();
         this.videoUrl = videoUrl;
     }
 
@@ -54,19 +56,19 @@ public class Downloader implements Callable<Object> {
         return Jsoup.connect(url)
                 .userAgent(UA)
                 .header("Accept-Language", "zh-CN")
-                .proxy(proxy).get();
+                .get();
     }
 
 
     private void outputToMp4(String title, String m3u8Url) throws Exception {
-        Files.createDirectories(Paths.get(download_dir));
-        String mp4Path = new StringBuilder(download_dir)
+        Files.createDirectories(Paths.get(config.getDownloadDir()));
+        String mp4Path = new StringBuilder(config.getDownloadDir())
                 .append(title)
                 .append(".mp4").toString();
         Files.deleteIfExists(Paths.get(mp4Path));
 
-        String _cmd = "export all_proxy=%s && ffmpeg -i '%s' -acodec copy -vcodec copy '%s'";
-        String cmd  = String.format(_cmd, socks5_proxy, m3u8Url, mp4Path);
+        String _cmd = "ffmpeg -i '%s' -acodec copy -vcodec copy '%s'";
+        String cmd  = String.format(_cmd, m3u8Url, mp4Path);
         logger.debug("cmd: {}", cmd);
 
         ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c", cmd);

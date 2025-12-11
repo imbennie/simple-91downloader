@@ -12,12 +12,16 @@
 (function () {
     'use strict';
 
-    function copyToClip() {
+    function copyToClip(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
         let m3u8Src = document.querySelector("#player_one_html5_api > source:nth-child(2)").src;
 
-        let mp4File = "/Users/bennie/Downloads/91/" + document.querySelector("div.videodetails-yakov:nth-child(1) > h4:nth-child(1)").innerText.trim();
-        let cmd = `ffmpeg -n -i '${m3u8Src}' -acodec copy -vcodec copy '${mp4File}.mp4'`
+        let mp4File = "~/Downloads/91/" + document.querySelector("div.videodetails-yakov:nth-child(1) > h4:nth-child(1)").innerText.trim();
+        let cmd = `mkdir -p ~/Downloads/91/ && ffmpeg -n -i '${m3u8Src}' -acodec copy -vcodec copy '${mp4File}.mp4'`
 
+        // uncomment this if use proxy
         //  let proxy = 'socks5://localhost:1080';
         // cmd = `export all_proxy=${proxy} && ` + cmd;
 
@@ -27,13 +31,31 @@
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
+        btn.textContent = "Copied!";
+        setTimeout(() => {
+            btn.textContent = "Copy CMD";
+        }, 2000);
     }
 
-    var div = document.createElement("div");
-    div.setAttribute("onmouseover", "this.style.cursor='pointer'")
-    div.appendChild(document.createTextNode("copy cmd"))
-    document.querySelector(".like-dislike").parentNode.appendChild(div);
 
-    div.onclick = copyToClip;
-
+    var btn = document.createElement("button");
+    btn.textContent = "Copy CMD";
+    btn.style.cssText = `
+        margin-left: 10px;
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+    `;
+    btn.onmouseover = function() {
+        this.style.backgroundColor = '#45a049';
+    };
+    btn.onmouseout = function() {
+        this.style.backgroundColor = '#4CAF50';
+    };
+    btn.addEventListener('click', copyToClip, false);
+    document.querySelector(".like-dislike").parentNode.appendChild(btn);
 })();
